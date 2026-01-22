@@ -1,0 +1,252 @@
+<div class="course-detail-container" *ngIf="!isLoading; else loading">
+  <div *ngIf="course; else notFound">
+    <!-- Hero Section -->
+    <section class="course-hero">
+      <div class="hero-content">
+        <div class="breadcrumb">
+          <a routerLink="/courses">Courses</a> / <span>{{ course.title }}</span>
+        </div>
+
+        <h1>{{ course.title }}</h1>
+        <p class="hero-description">{{ course.description }}</p>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-icon">⭐</span>
+            <div>
+              <div class="stat-value">{{ course.rating }} / 5</div>
+              <div class="stat-label">Course Rating</div>
+            </div>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">👥</span>
+            <div>
+              <div class="stat-value">{{ course.enrolledStudents | number }}</div>
+              <div class="stat-label">Students Enrolled</div>
+            </div>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">⏱️</span>
+            <div>
+              <div class="stat-value">{{ course.duration }}h</div>
+              <div class="stat-label">Total Duration</div>
+            </div>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">📊</span>
+            <div>
+              <div class="stat-value">{{ course.level }}</div>
+              <div class="stat-label">Difficulty Level</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <img [src]="course.image" [alt]="course.title" />
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="course-body">
+      <!-- Left Column -->
+      <main class="course-main">
+        <!-- Instructor Section -->
+        <section class="section">
+          <h2>About the Instructor</h2>
+          <div class="instructor-card">
+            <img [src]="course.instructor.image" [alt]="course.instructor.name" class="instructor-image" />
+            <div class="instructor-info">
+              <h3>{{ course.instructor.name }}</h3>
+              <p class="specialization">{{ course.instructor.specialization }}</p>
+              <p class="bio">{{ course.instructor.bio }}</p>
+              <a [href]="'mailto:' + course.instructor.email" class="email-link">
+                ✉️ Contact Instructor
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Course Overview -->
+        <section class="section">
+          <h2>Course Overview</h2>
+          <div class="overview-grid">
+            <div class="overview-item">
+              <div class="overview-icon">🎯</div>
+              <h4>Learning Outcomes</h4>
+              <ul>
+                <li *ngFor="let outcome of course.learningOutcomes">
+                  {{ outcome }}
+                </li>
+              </ul>
+            </div>
+
+            <div class="overview-item">
+              <div class="overview-icon">📚</div>
+              <h4>Course Syllabus</h4>
+              <ol>
+                <li *ngFor="let topic of course.syllabus">
+                  {{ topic }}
+                </li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Detailed Syllabus Section -->
+        <section class="section">
+          <h2>📚 Complete Course Syllabus</h2>
+          <div class="detailed-syllabus">
+            <div *ngFor="let topic of course.syllabus; let i = index" class="syllabus-item">
+              <div class="syllabus-number">{{ i + 1 }}</div>
+              <div class="syllabus-content">
+                <h4>{{ topic }}</h4>
+                <p class="syllabus-duration">Duration: ~{{ (course.duration / course.syllabus.length) | number:'1.0-0' }} hours</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section">
+          <h2>❓ Frequently Asked Questions</h2>
+          <div class="faq-container">
+            <div class="faq-item" *ngFor="let faq of faqs">
+              <button class="faq-question" (click)="toggleFaq(faq.id)" [class.open]="faq.open">
+                <span>{{ faq.question }}</span>
+                <span class="faq-icon">{{ faq.open ? '−' : '+' }}</span>
+              </button>
+              <div class="faq-answer" *ngIf="faq.open">
+                <p>{{ faq.answer }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="section">
+          <h2>Student Reviews</h2>
+          <div class="rating-summary">
+            <div class="rating-display">
+              <div class="big-rating">{{ course.rating }}</div>
+              <div class="stars-display">
+                <span class="star" *ngFor="let i of [1, 2, 3, 4, 5]" [class.filled]="i <= course.rating">★</span>
+              </div>
+              <p class="review-count">({{ course.reviews.length }} reviews)</p>
+            </div>
+
+            <div class="rating-breakdown">
+              <div class="rating-bar" *ngFor="let num of [5, 4, 3, 2, 1]">
+                <span class="bar-label">{{ num }}★</span>
+                <div class="bar-container">
+                  <div class="bar-fill" [style.width.%]="getReviewPercentage(num)"></div>
+                </div>
+                <span class="bar-count">{{ getReviewCountByRating(num) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="reviews-list">
+            <div *ngIf="course.reviews.length === 0" class="no-reviews">
+              <p>No reviews yet. Be the first to review this course!</p>
+            </div>
+
+            <div *ngFor="let review of course.reviews" class="review-card">
+              <div class="review-header">
+                <div class="review-author">
+                  <h4>{{ review.studentName }}</h4>
+                  <span class="review-date">{{ review.date }}</span>
+                </div>
+                <div class="review-rating">
+                  <span class="stars-small">
+                    <span *ngFor="let i of [1, 2, 3, 4, 5]" [class.filled]="i <= review.rating">★</span>
+                  </span>
+                </div>
+              </div>
+              <p class="review-comment">{{ review.comment }}</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Right Sidebar -->
+      <aside class="course-sidebar">
+        <div class="enrollment-card">
+          <div class="price-section">
+            <div class="price">
+              <span class="currency">$</span>
+              <span class="amount">{{ course.price }}</span>
+            </div>
+          </div>
+
+          <button
+            *ngIf="!isEnrolled"
+            class="btn-enroll-large"
+            [routerLink]="['/enroll', course.id]"
+          >
+            Enroll Now
+          </button>
+
+          <button *ngIf="isEnrolled" class="btn-enrolled" disabled>
+            ✓ Already Enrolled
+          </button>
+
+          <div class="course-info-list">
+            <div class="info-item">
+              <span class="info-icon">🎓</span>
+              <span>{{ course.level }} Level</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">⏱️</span>
+              <span>{{ course.duration }} hours total</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">📚</span>
+              <span>{{ course.syllabus.length }} modules</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">👥</span>
+              <span>{{ course.enrolledStudents | number }} students</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">🗂️</span>
+              <span>{{ course.category }}</span>
+            </div>
+          </div>
+
+          <div class="features">
+            <h4>What you get:</h4>
+            <ul>
+              <li>📖 Lifetime access</li>
+              <li>📱 Mobile-friendly content</li>
+              <li>📜 Certificate of completion</li>
+              <li>💬 Q&A support</li>
+              <li>🔄 Regular updates</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div *ngIf="notFound" class="not-found">
+    <h2>Course Not Found</h2>
+    <p>Sorry, the course you're looking for doesn't exist.</p>
+    <a routerLink="/courses" class="btn-back">Back to Courses</a>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Loading course details...</p>
+  </div>
+</ng-template>
+
+<ng-template #notFound>
+  <div class="not-found">
+    <h2>Course Not Found</h2>
+    <p>The course you're looking for doesn't exist.</p>
+    <a routerLink="/courses" class="btn-back">Back to Courses</a>
+  </div>
+</ng-template>

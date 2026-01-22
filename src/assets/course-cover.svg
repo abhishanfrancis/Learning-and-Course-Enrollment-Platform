@@ -1,0 +1,20 @@
+<svg width="600" height="360" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Course Cover</title>
+  <desc id="desc">Abstract gradient background for course cards</desc>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6a85ff" />
+      <stop offset="50%" stop-color="#7f6bff" />
+      <stop offset="100%" stop-color="#9c5de8" />
+    </linearGradient>
+    <radialGradient id="r" cx="25%" cy="25%" r="80%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="600" height="360" fill="url(#g)" rx="24" ry="24" />
+  <circle cx="120" cy="90" r="90" fill="url(#r)" />
+  <circle cx="520" cy="70" r="70" fill="url(#r)" />
+  <path d="M60 280 C 180 240, 260 320, 380 290 S 540 320, 600 250" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="10" stroke-linecap="round" />
+  <path d="M40 240 C 160 200, 260 270, 380 240 S 540 270, 610 210" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="12" stroke-linecap="round" />
+</svg>

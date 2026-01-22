@@ -1,0 +1,369 @@
+.enroll-container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.enroll-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.enroll-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.enroll-header h1 {
+  font-size: 36px;
+  color: #333;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.enroll-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.enroll-body {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 30px;
+}
+
+/* Course Summary */
+.course-summary {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.summary-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.summary-details {
+  padding: 25px;
+}
+
+.summary-details h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0 0 20px;
+  font-weight: 700;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.summary-item .label {
+  color: #666;
+  font-weight: 600;
+}
+
+.summary-item .value {
+  color: #333;
+  font-weight: 500;
+}
+
+.summary-divider {
+  height: 1px;
+  background: #eee;
+  margin: 20px 0;
+}
+
+.summary-price {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.summary-price .label {
+  color: #666;
+}
+
+.summary-price .value {
+  color: #667eea;
+}
+
+.summary-price .price {
+  font-size: 24px;
+}
+
+/* Enrollment Form */
+.enrollment-form-section {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.form-section {
+  margin-bottom: 30px;
+}
+
+.form-section h3 {
+  font-size: 20px;
+  color: #333;
+  margin: 0 0 25px;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-input.error {
+  border-color: #ff4757;
+}
+
+.error-message {
+  display: block;
+  color: #ff4757;
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Checkbox */
+.form-group.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+#agreeTerms {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+#agreeTerms.error {
+  accent-color: #ff4757;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.form-group.checkbox .error-message {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* Error Banner */
+.error-banner {
+  background: #ffe5e5;
+  border-left: 4px solid #ff4757;
+  padding: 15px;
+  border-radius: 6px;
+  color: #ff4757;
+  font-weight: 600;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Submit Button */
+.btn-enroll-submit {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.btn-enroll-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+}
+
+.btn-enroll-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-footer {
+  text-align: center;
+}
+
+.btn-back-form {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.btn-back-form:hover {
+  color: #764ba2;
+}
+
+/* Success Container */
+.success-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.success-card {
+  background: white;
+  border-radius: 16px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  margin: 0 auto 30px;
+  font-weight: 700;
+}
+
+.success-card h2 {
+  font-size: 32px;
+  color: #333;
+  margin: 0 0 15px;
+  font-weight: 700;
+}
+
+.success-card p {
+  color: #666;
+  font-size: 16px;
+  margin: 0 0 10px;
+  line-height: 1.6;
+}
+
+.success-subtitle {
+  color: #999;
+  font-size: 14px;
+  margin-bottom: 30px !important;
+}
+
+.success-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 2px solid #eee;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #666;
+  font-size: 14px;
+}
+
+.detail-icon {
+  font-size: 20px;
+}
+
+@media (max-width: 768px) {
+  .enroll-body {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    position: static;
+  }
+
+  .enrollment-form-section {
+    padding: 25px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .enroll-header h1 {
+    font-size: 24px;
+  }
+
+  .success-card {
+    padding: 40px 25px;
+  }
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+  }
+
+  .success-card h2 {
+    font-size: 24px;
+  }
+}

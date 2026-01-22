@@ -1,0 +1,145 @@
+<div class="course-list-container">
+  <div class="course-header">
+    <h1>Browse Courses</h1>
+    <p>Discover and enroll in our extensive collection of courses</p>
+  </div>
+
+  <div class="course-content">
+    <!-- Filters Section -->
+    <aside class="filters-sidebar">
+      <div class="filter-section">
+        <h3 class="filter-title">Filters</h3>
+
+        <!-- Category Filter -->
+        <div class="filter-group">
+          <label for="category" class="filter-label">Category</label>
+          <select
+            id="category"
+            class="filter-select"
+            [(ngModel)]="selectedCategory"
+            (change)="onCategoryChange()"
+          >
+            <option *ngFor="let cat of categories" [value]="cat">
+              {{ cat }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Level Filter -->
+        <div class="filter-group">
+          <label for="level" class="filter-label">Level</label>
+          <select
+            id="level"
+            class="filter-select"
+            [(ngModel)]="selectedLevel"
+            (change)="onLevelChange()"
+          >
+            <option *ngFor="let lvl of levels" [value]="lvl">
+              {{ lvl }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Price Filter -->
+        <div class="filter-group">
+          <label for="price" class="filter-label">Max Price: ${{ maxPrice }}</label>
+          <input
+            id="price"
+            type="range"
+            class="filter-range"
+            min="0"
+            max="100"
+            [(ngModel)]="maxPrice"
+            (change)="onPriceChange()"
+          />
+          <div class="price-labels">
+            <span>$0</span>
+            <span>$100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-stats">
+        <p>
+          Showing <strong>{{ filteredCourses.length }}</strong> of
+          <strong>{{ courses.length }}</strong> courses
+        </p>
+      </div>
+    </aside>
+
+    <!-- Courses Grid -->
+    <main class="courses-grid">
+      <div *ngIf="filteredCourses.length === 0" class="no-courses">
+        <p>No courses found matching your filters.</p>
+        <button class="btn-reset" (click)="selectedCategory = 'All'; selectedLevel = 'All'; maxPrice = 100; applyFilters()">
+          Reset Filters
+        </button>
+      </div>
+
+      <div *ngFor="let course of filteredCourses" class="course-card">
+        <div class="course-image">
+          <img [src]="course.image" [alt]="course.title" />
+          <div class="course-badge">
+            <span class="badge-level" [class]="'level-' + course.level.toLowerCase()">
+              {{ course.level }}
+            </span>
+          </div>
+        </div>
+
+        <div class="course-card-body">
+          <h3 class="course-title">{{ course.title }}</h3>
+          <p class="course-description">{{ course.description }}</p>
+
+          <div class="course-meta">
+            <div class="meta-item">
+              <span class="meta-icon">👨‍🏫</span>
+              <span class="meta-value">{{ course.instructor.name }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon">⏱️</span>
+              <span class="meta-value">{{ course.duration }} hours</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-icon">👥</span>
+              <span class="meta-value">{{ course.enrolledStudents }} enrolled</span>
+            </div>
+          </div>
+
+          <div class="course-rating">
+            <span class="stars">★ {{ course.rating }}</span>
+            <span class="category">{{ course.category }}</span>
+          </div>
+
+          <div class="course-footer">
+            <div class="price">
+              <span class="currency">$</span>
+              <span class="amount">{{ course.price }}</span>
+            </div>
+            <div class="actions">
+              <button
+                class="btn-view"
+                [routerLink]="['/course', course.id]"
+              >
+                View Details
+              </button>
+              <button
+                class="btn-enroll"
+                [routerLink]="['/enroll', course.id]"
+                *ngIf="currentStudent"
+              >
+                Enroll Now
+              </button>
+              <button
+                class="btn-login-prompt"
+                *ngIf="!currentStudent"
+                disabled
+              >
+                Login to Enroll
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

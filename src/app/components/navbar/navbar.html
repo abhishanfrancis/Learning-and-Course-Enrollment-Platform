@@ -1,0 +1,55 @@
+<header class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-logo">
+      <a routerLink="/">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">LearnHub</span>
+      </a>
+    </div>
+
+    <nav class="navbar-menu">
+      <ul class="navbar-list">
+        <li class="navbar-item">
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            Home
+          </a>
+        </li>
+        <li class="navbar-item">
+          <a routerLink="/courses" routerLinkActive="active">
+            Courses
+          </a>
+        </li>
+        <li class="navbar-item" *ngIf="currentStudent">
+          <a routerLink="/dashboard" routerLinkActive="active">
+            Dashboard
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="navbar-profile" *ngIf="currentStudent">
+      <div class="profile-dropdown">
+        <button class="profile-btn" (click)="toggleDropdown()">
+          <img [src]="currentStudent.profileImage" alt="{{ currentStudent.name }}" class="profile-img" />
+          <span class="profile-name">{{ currentStudent.name }}</span>
+          <span class="dropdown-arrow" [class.open]="isDropdownOpen">▼</span>
+        </button>
+
+        <div class="dropdown-menu" *ngIf="isDropdownOpen">
+          <div class="dropdown-item">
+            <span class="email">{{ currentStudent.email }}</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item logout-btn" (click)="logout()">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-auth" *ngIf="!currentStudent">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </div>
+</header>
