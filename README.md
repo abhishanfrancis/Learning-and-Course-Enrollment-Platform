@@ -212,13 +212,13 @@ This project is available for educational and portfolio purposes.
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
 
 ---
-
+<!--
 ## 📸 Screenshots
 
 *Add your application screenshots here after deployment*
 
 ---
-
+-->
 ## 🙏 Acknowledgments
 
 - Angular Team for the amazing framework
