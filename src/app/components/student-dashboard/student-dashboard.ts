@@ -31,15 +31,16 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   loadStudentData(): void {
-    this.studentService.getCurrentStudent().subscribe((student) => {
-      this.currentStudent = student;
-      if (student) {
-        this.loadEnrolledCourses(student.id);
-      }
-    });
-
+    // Load all courses first, then enrolled courses
     this.courseService.getCourses().subscribe((courses) => {
       this.allCourses = courses;
+
+      this.studentService.getCurrentStudent().subscribe((student) => {
+        this.currentStudent = student;
+        if (student) {
+          this.loadEnrolledCourses(student.id);
+        }
+      });
     });
   }
 

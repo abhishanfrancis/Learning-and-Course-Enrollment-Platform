@@ -15,7 +15,7 @@ export class CourseService {
       level: 'Beginner',
       price: 49.99,
       duration: 20,
-      image: 'assets/courses/angular-fundamentals.jpg',
+      image: 'https://image2url.com/r2/default/images/1769100452632-3e2f6ac1-8290-449c-bcb5-5b37cb2ca7f3.jpg',
       instructor: {
         id: 1,
         name: 'Sarah Johnson',
@@ -64,7 +64,7 @@ export class CourseService {
       level: 'Advanced',
       price: 59.99,
       duration: 25,
-      image: 'assets/courses/typescript-advanced.jpg',
+      image: 'https://image2url.com/r2/default/images/1769100603583-0d1513f4-745a-44a8-a401-b00af9dd334c.jpg',
       instructor: {
         id: 2,
         name: 'Michael Chen',
@@ -106,7 +106,7 @@ export class CourseService {
       level: 'Intermediate',
       price: 54.99,
       duration: 22,
-      image: 'assets/course-cover.svg',
+      image: 'https://image2url.com/r2/default/images/1769101108965-c73cc19b-7999-4f3f-8ee8-1378fb552c0f.png',
       instructor: {
         id: 3,
         name: 'Emily Watson',
@@ -140,7 +140,7 @@ export class CourseService {
       level: 'Intermediate',
       price: 44.99,
       duration: 18,
-      image: 'assets/course-cover.svg',
+      image: 'https://image2url.com/r2/default/images/1769101177943-f343bf0a-0314-40b7-b5df-f7635f6f8118.jpg',
       instructor: {
         id: 4,
         name: 'David Martinez',
@@ -182,7 +182,7 @@ export class CourseService {
       level: 'Advanced',
       price: 79.99,
       duration: 40,
-      image: 'assets/course-cover.svg',
+      image: 'https://image2url.com/r2/default/images/1769101226610-fc9687d2-8cff-4ceb-b2e5-a072c06af319.jpg',
       instructor: {
         id: 5,
         name: 'Lisa Anderson',
@@ -216,7 +216,7 @@ export class CourseService {
       level: 'Advanced',
       price: 64.99,
       duration: 20,
-      image: 'assets/course-cover.svg',
+      image: 'https://image2url.com/r2/default/images/1769101314157-dcacda48-c6c7-4eb0-bee8-9942df8e7788.jpg',
       instructor: {
         id: 6,
         name: 'James Wilson',

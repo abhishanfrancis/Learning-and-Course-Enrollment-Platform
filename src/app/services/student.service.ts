@@ -13,7 +13,7 @@ export class StudentService {
     email: 'roy@example.com',
     password: 'password123',
     phone: '+1 (555) 123-4567',
-    profileImage: 'assets/profiles/roy.jpg',
+    profileImage: 'https://image2url.com/r2/default/images/1769100653013-6c34be2e-4be5-4146-b42e-cb6ebe7e303d.jpg',
     joinDate: '2023-06-15',
   };
 
