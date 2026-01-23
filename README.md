@@ -9,7 +9,7 @@ A modern, feature-rich learning management platform built with Angular 21. Brows
 
 ## 📸 Screenshots
 
-![screenshot](/learning-platform/screenshot.gif)
+![screenshot](screenshot.gif)
 
 ## ✨ Features
 
