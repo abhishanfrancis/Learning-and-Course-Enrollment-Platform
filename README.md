@@ -214,7 +214,7 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ## 📸 Screenshots
 
-*Add your application screenshots here after deployment*
+
 
 ---
 
