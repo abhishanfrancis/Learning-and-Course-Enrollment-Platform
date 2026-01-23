@@ -4,8 +4,7 @@ A modern, feature-rich learning management platform built with Angular 21. Brows
 
 ## 🚀 Live Preview
 
-**[View Live Demo](https://learning-and-course-enrollment-plat.vercel.app/)** ← *Paste your preview link here*
-
+**[View Live Demo](https://learning-and-course-enrollment-plat.vercel.app/)** 
 ---
 
 ## ✨ Features
