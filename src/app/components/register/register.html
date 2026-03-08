@@ -1,0 +1,197 @@
+<!-- Register Component - Template-driven form for student registration -->
+<div class="register-container">
+  <mat-card class="register-card">
+    <mat-card-header>
+      <div class="register-header">
+        <mat-icon class="register-icon">person_add</mat-icon>
+        <h1>Create Account</h1>
+        <p>Join LearnHub and start your learning journey</p>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Template-driven form using #registerForm="ngForm" -->
+      <form #registerForm="ngForm" (ngSubmit)="registerForm.valid && onSubmit()" class="register-form" novalidate>
+
+        <!-- Full Name Field -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            <mat-icon class="field-icon">person</mat-icon>
+            Full Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            class="form-input"
+            name="name"
+            [(ngModel)]="name"
+            #nameField="ngModel"
+            required
+            minlength="3"
+            placeholder="Enter your full name"
+            [class.error]="nameField.invalid && nameField.touched"
+          />
+          <!-- Error messages using touched + invalid states -->
+          <div class="error-messages" *ngIf="nameField.invalid && nameField.touched">
+            <span *ngIf="nameField.errors?.['required']" class="error-message">
+              Name is required
+            </span>
+            <span *ngIf="nameField.errors?.['minlength']" class="error-message">
+              Name must be at least 3 characters
+            </span>
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <mat-icon class="field-icon">email</mat-icon>
+            Email Address
+          </label>
+          <input
+            id="email"
+            type="email"
+            class="form-input"
+            name="email"
+            [(ngModel)]="email"
+            #emailField="ngModel"
+            required
+            email
+            placeholder="you@example.com"
+            [class.error]="emailField.invalid && emailField.touched"
+          />
+          <div class="error-messages" *ngIf="emailField.invalid && emailField.touched">
+            <span *ngIf="emailField.errors?.['required']" class="error-message">
+              Email is required
+            </span>
+            <span *ngIf="emailField.errors?.['email']" class="error-message">
+              Please enter a valid email address
+            </span>
+          </div>
+        </div>
+
+        <!-- Phone Field -->
+        <div class="form-group">
+          <label for="phone" class="form-label">
+            <mat-icon class="field-icon">phone</mat-icon>
+            Phone Number
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            class="form-input"
+            name="phone"
+            [(ngModel)]="phone"
+            #phoneField="ngModel"
+            required
+            minlength="10"
+            placeholder="+1 (555) 123-4567"
+            [class.error]="phoneField.invalid && phoneField.touched"
+          />
+          <div class="error-messages" *ngIf="phoneField.invalid && phoneField.touched">
+            <span *ngIf="phoneField.errors?.['required']" class="error-message">
+              Phone number is required
+            </span>
+            <span *ngIf="phoneField.errors?.['minlength']" class="error-message">
+              Phone number must be at least 10 characters
+            </span>
+          </div>
+        </div>
+
+        <!-- Password Field with strength indicator -->
+        <div class="form-group">
+          <label for="password" class="form-label">
+            <mat-icon class="field-icon">lock</mat-icon>
+            Password
+          </label>
+          <div class="password-wrapper">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-input"
+              name="password"
+              [(ngModel)]="password"
+              #passwordField="ngModel"
+              required
+              minlength="6"
+              placeholder="Create a strong password"
+              [class.error]="passwordField.invalid && passwordField.touched"
+            />
+            <button type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          <div class="error-messages" *ngIf="passwordField.invalid && passwordField.touched">
+            <span *ngIf="passwordField.errors?.['required']" class="error-message">
+              Password is required
+            </span>
+            <span *ngIf="passwordField.errors?.['minlength']" class="error-message">
+              Password must be at least 6 characters
+            </span>
+          </div>
+          <!-- Password strength indicator -->
+          <div class="password-strength" *ngIf="password">
+            <div class="strength-bar">
+              <div class="strength-fill" [ngClass]="'strength-' + getPasswordStrength()"></div>
+            </div>
+            <span class="strength-label" [ngClass]="'strength-' + getPasswordStrength()">
+              {{ getPasswordStrength() | titlecase }} Password
+            </span>
+          </div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">
+            <mat-icon class="field-icon">lock_outline</mat-icon>
+            Confirm Password
+          </label>
+          <input
+            id="confirmPassword"
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-input"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            #confirmField="ngModel"
+            required
+            placeholder="Re-enter your password"
+            [class.error]="(confirmField.touched && !passwordsMatch) || (confirmField.invalid && confirmField.touched)"
+          />
+          <div class="error-messages" *ngIf="confirmField.touched">
+            <span *ngIf="confirmField.errors?.['required']" class="error-message">
+              Please confirm your password
+            </span>
+            <span *ngIf="!confirmField.errors?.['required'] && !passwordsMatch" class="error-message">
+              Passwords do not match
+            </span>
+          </div>
+        </div>
+
+        <!-- Registration Error Banner -->
+        <div class="error-banner" *ngIf="registerError">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ registerError }}</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="btn-register-submit"
+          [disabled]="registerForm.invalid || isSubmitting || !passwordsMatch"
+        >
+          <mat-icon *ngIf="!isSubmitting">how_to_reg</mat-icon>
+          <span *ngIf="!isSubmitting">Create Account</span>
+          <span *ngIf="isSubmitting">Creating Account...</span>
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div class="register-footer">
+        <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

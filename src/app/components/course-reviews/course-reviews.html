@@ -1,0 +1,64 @@
+<!-- Course Reviews Child Route Component -->
+<div class="reviews-container">
+  <div *ngIf="isLoading" class="loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Loading reviews...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- Rating Summary Section -->
+    <div class="rating-summary">
+      <div class="rating-overview">
+        <div class="big-rating">{{ averageRating }}</div>
+        <div class="stars-display">
+          <mat-icon *ngFor="let star of getStars(averageRating)"
+                    [class.filled]="star === 'filled'">
+            star
+          </mat-icon>
+        </div>
+        <p class="review-count">{{ totalReviews }} {{ totalReviews === 1 ? 'review' : 'reviews' }}</p>
+      </div>
+
+      <!-- Rating Breakdown Bars -->
+      <div class="rating-breakdown">
+        <div class="rating-bar" *ngFor="let num of [5, 4, 3, 2, 1]">
+          <span class="bar-label">{{ num }}<mat-icon class="star-small">star</mat-icon></span>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="getReviewPercentage(num)"
+            class="bar-progress">
+          </mat-progress-bar>
+          <span class="bar-count">{{ getReviewCountByRating(num) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="reviews-list">
+      <div *ngIf="reviews.length === 0" class="no-reviews">
+        <mat-icon class="empty-icon">rate_review</mat-icon>
+        <p>No reviews yet. Be the first to review this course!</p>
+      </div>
+
+      <mat-card *ngFor="let review of reviews" class="review-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="review-avatar">account_circle</mat-icon>
+          <mat-card-title>{{ review.studentName }}</mat-card-title>
+          <mat-card-subtitle>
+            <span class="review-date">{{ review.date | date:'mediumDate' }}</span>
+            <span class="review-stars">
+              <mat-icon *ngFor="let star of getStars(review.rating)"
+                        [class.filled]="star === 'filled'"
+                        class="star-icon">
+                star
+              </mat-icon>
+            </span>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="review-comment">{{ review.comment }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

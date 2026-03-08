@@ -462,3 +462,66 @@
     padding: 15px;
   }
 }
+
+/* ===== MatTable Styles ===== */
+.table-section {
+  margin-bottom: 30px;
+}
+
+.table-section h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.courses-table {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+}
+
+.table-progress mat-progress-bar {
+  flex: 1;
+}
+
+.table-progress span {
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 35px;
+}
+
+/* Material icon in instructor row */
+.instructor-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: 4px;
+  color: #667eea;
+}
+
+/* Empty state icon */
+.empty-icon-mat {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+  margin-bottom: 15px;
+}
+
+/* MatCard overrides for course progress cards */
+mat-card.course-progress-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+mat-card.course-progress-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}

@@ -699,3 +699,43 @@
     padding: 12px;
   }
 }
+
+/* ===== Child Route Tab Navigation ===== */
+.child-route-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0;
+}
+
+.tab-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+  font-size: 14px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  margin-bottom: -2px;
+}
+
+.tab-link:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.tab-link.tab-active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+  font-weight: 600;
+}
+
+.tab-link mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

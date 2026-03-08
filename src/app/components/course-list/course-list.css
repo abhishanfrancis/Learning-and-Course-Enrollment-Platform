@@ -415,3 +415,59 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Material icon styling inside meta items */
+.meta-mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #667eea;
+}
+
+.no-courses-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+  margin-bottom: 15px;
+}
+
+/* Enrolled tag button styling */
+.btn-enrolled-tag {
+  background: #e8f5e9 !important;
+  color: #2e7d32 !important;
+}
+
+/* Filter title with icon */
+.filter-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-title mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #667eea;
+}
+
+/* Course card Material overrides */
+mat-card.course-card {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+mat-card.course-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+mat-card-actions.course-footer {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

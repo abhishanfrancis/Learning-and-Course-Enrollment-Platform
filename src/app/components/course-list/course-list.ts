@@ -1,16 +1,39 @@
+/**
+ * CourseListComponent - Displays all courses with filtering capabilities.
+ *
+ * Features:
+ * - Uses custom pipes (CourseFilterPipe, CourseLevelPipe, CourseDurationPipe) for filtering
+ * - Uses custom directives (HighlightTrending, HighlightNew) for visual highlighting
+ * - Uses Angular Material components (MatCard, MatButton, MatIcon)
+ * - Uses EnrollmentService to check enrollment status
+ * - Uses UserService for authentication state
+ */
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { CourseService } from '../../services/course.service';
-import { StudentService } from '../../services/student.service';
+import { UserService } from '../../services/user.service';
+import { EnrollmentService } from '../../services/enrollment.service';
 import { Course } from '../../models/course.model';
 import { Student } from '../../models/student.model';
+// Custom pipes for filtering
+import { CourseFilterPipe, CourseLevelPipe, CourseDurationPipe } from '../../pipes/course-filter.pipe';
+// Custom directives for visual highlighting
+import { HighlightTrendingDirective, HighlightNewDirective } from '../../directives/highlight-course.directive';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [
+    CommonModule, FormsModule, RouterLink,
+    MatCardModule, MatButtonModule, MatIconModule,
+    CourseFilterPipe, CourseLevelPipe, CourseDurationPipe,
+    HighlightTrendingDirective, HighlightNewDirective
+  ],
   templateUrl: './course-list.html',
   styleUrl: './course-list.css',
 })
@@ -20,15 +43,17 @@ export class CourseListComponent implements OnInit {
   categories: string[] = [];
   levels: string[] = [];
   currentStudent: Student | null = null;
+  enrolledCourseIds: number[] = [];
 
-  // Filter properties
+  // Filter properties bound to template controls
   selectedCategory = 'All';
   selectedLevel = 'All';
   maxPrice = 100;
 
   constructor(
     private courseService: CourseService,
-    private studentService: StudentService
+    private userService: UserService,
+    private enrollmentService: EnrollmentService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +63,7 @@ export class CourseListComponent implements OnInit {
     this.loadCurrentStudent();
   }
 
+  /** Load all courses from CourseService (HttpClient-backed) */
   loadCourses(): void {
     this.courseService.getCourses().subscribe((data) => {
       this.courses = data;
@@ -46,6 +72,7 @@ export class CourseListComponent implements OnInit {
   }
 
   loadCategories(): void {
+    // Categories are derived from the loaded courses
     this.categories = ['All', ...this.courseService.getCategories()];
   }
 
@@ -53,12 +80,20 @@ export class CourseListComponent implements OnInit {
     this.levels = ['All', ...this.courseService.getLevels()];
   }
 
+  /** Load current user from UserService and enrolled courses from EnrollmentService */
   loadCurrentStudent(): void {
-    this.studentService.getCurrentStudent().subscribe((student) => {
+    this.userService.getCurrentUser$().subscribe((student) => {
       this.currentStudent = student;
+      if (student) {
+        // Load enrolled course IDs for the current user
+        this.enrollmentService.getStudentEnrollments(student.id).subscribe((enrollments) => {
+          this.enrolledCourseIds = enrollments.map((e) => e.courseId);
+        });
+      }
     });
   }
 
+  /** Apply all active filters using CourseService's filter method */
   applyFilters(): void {
     this.courseService
       .filterCourses(
@@ -83,10 +118,8 @@ export class CourseListComponent implements OnInit {
     this.applyFilters();
   }
 
+  /** Check if the current user is enrolled in a specific course */
   isEnrolled(courseId: number): boolean {
-    if (!this.currentStudent) return false;
-    // Check if student is enrolled in this course
-    // This would need to be implemented with actual enrollment checking
-    return false;
+    return this.enrolledCourseIds.includes(courseId);
   }
 }

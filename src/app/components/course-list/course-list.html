@@ -1,3 +1,4 @@
+<!-- Course List - Browse all courses with filtering, custom pipes, and directives -->
 <div class="course-list-container">
   <div class="course-header">
     <h1>Browse Courses</h1>
@@ -8,7 +9,9 @@
     <!-- Filters Section -->
     <aside class="filters-sidebar">
       <div class="filter-section">
-        <h3 class="filter-title">Filters</h3>
+        <h3 class="filter-title">
+          <mat-icon>filter_list</mat-icon> Filters
+        </h3>
 
         <!-- Category Filter -->
         <div class="filter-group">
@@ -61,7 +64,7 @@
 
       <div class="filter-stats">
         <p>
-          Showing <strong>{{ filteredCourses.length }}</strong> of
+          Showing <strong>{{ (courses | courseFilter:selectedCategory | courseLevel:selectedLevel | courseDuration:maxPrice).length }}</strong> of
           <strong>{{ courses.length }}</strong> courses
         </p>
       </div>
@@ -69,38 +72,46 @@
 
     <!-- Courses Grid -->
     <main class="courses-grid">
-      <div *ngIf="filteredCourses.length === 0" class="no-courses">
+      <div *ngIf="(courses | courseFilter:selectedCategory | courseLevel:selectedLevel | courseDuration:maxPrice).length === 0" class="no-courses">
+        <mat-icon class="no-courses-icon">search_off</mat-icon>
         <p>No courses found matching your filters.</p>
-        <button class="btn-reset" (click)="selectedCategory = 'All'; selectedLevel = 'All'; maxPrice = 100; applyFilters()">
+        <button mat-raised-button color="primary" (click)="selectedCategory = 'All'; selectedLevel = 'All'; maxPrice = 100; applyFilters()">
           Reset Filters
         </button>
       </div>
 
-      <div *ngFor="let course of filteredCourses" class="course-card">
+      <!-- Course Card - uses HighlightTrending and HighlightNew directives -->
+      <!-- Using custom pipes (courseFilter, courseLevel, courseDuration) for template-driven filtering -->
+      <mat-card *ngFor="let course of courses | courseFilter:selectedCategory | courseLevel:selectedLevel | courseDuration:maxPrice" class="course-card"
+        [appHighlightTrending]="course.isTrending"
+        [appHighlightNew]="course.isNew">
         <div class="course-image">
           <img [src]="course.image" [alt]="course.title" />
           <div class="course-badge">
             <span class="badge-level" [class]="'level-' + course.level.toLowerCase()">
               {{ course.level }}
             </span>
+            <!-- Trending & New badges using custom directives -->
+            <span class="trending-badge" *ngIf="course.isTrending">🔥 Trending</span>
+            <span class="new-badge" *ngIf="course.isNew">✨ New</span>
           </div>
         </div>
 
-        <div class="course-card-body">
+        <mat-card-content class="course-card-body">
           <h3 class="course-title">{{ course.title }}</h3>
           <p class="course-description">{{ course.description }}</p>
 
           <div class="course-meta">
             <div class="meta-item">
-              <span class="meta-icon">👨‍🏫</span>
+              <mat-icon class="meta-mat-icon">person</mat-icon>
               <span class="meta-value">{{ course.instructor.name }}</span>
             </div>
             <div class="meta-item">
-              <span class="meta-icon">⏱️</span>
+              <mat-icon class="meta-mat-icon">schedule</mat-icon>
               <span class="meta-value">{{ course.duration }} hours</span>
             </div>
             <div class="meta-item">
-              <span class="meta-icon">👥</span>
+              <mat-icon class="meta-mat-icon">group</mat-icon>
               <span class="meta-value">{{ course.enrolledStudents }} enrolled</span>
             </div>
           </div>
@@ -109,37 +120,42 @@
             <span class="stars">★ {{ course.rating }}</span>
             <span class="category">{{ course.category }}</span>
           </div>
+        </mat-card-content>
 
-          <div class="course-footer">
-            <div class="price">
-              <span class="currency">$</span>
-              <span class="amount">{{ course.price }}</span>
-            </div>
-            <div class="actions">
-              <button
-                class="btn-view"
-                [routerLink]="['/course', course.id]"
-              >
-                View Details
-              </button>
-              <button
-                class="btn-enroll"
-                [routerLink]="['/enroll', course.id]"
-                *ngIf="currentStudent"
-              >
-                Enroll Now
-              </button>
-              <button
-                class="btn-login-prompt"
-                *ngIf="!currentStudent"
-                disabled
-              >
-                Login to Enroll
-              </button>
-            </div>
+        <mat-card-actions class="course-footer">
+          <div class="price">
+            <span class="currency">$</span>
+            <span class="amount">{{ course.price }}</span>
           </div>
-        </div>
-      </div>
+          <div class="actions">
+            <button mat-stroked-button color="primary" [routerLink]="['/course', course.id]">
+              View Details
+            </button>
+            <button
+              mat-raised-button color="accent"
+              [routerLink]="['/enroll', course.id]"
+              *ngIf="currentStudent && !isEnrolled(course.id)"
+            >
+              Enroll Now
+            </button>
+            <button
+              mat-flat-button
+              *ngIf="currentStudent && isEnrolled(course.id)"
+              disabled
+              class="btn-enrolled-tag"
+            >
+              ✓ Enrolled
+            </button>
+            <a
+              mat-stroked-button
+              routerLink="/login"
+              *ngIf="!currentStudent"
+            >
+              Login to Enroll
+            </a>
+          </div>
+        </mat-card-actions>
+      </mat-card>
     </main>
   </div>
 </div>

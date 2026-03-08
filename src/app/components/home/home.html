@@ -1,3 +1,4 @@
+<!-- Home - Landing page with personalized CTA -->
 <div class="home-container">
   <!-- Hero Section -->
   <section class="hero">
@@ -9,8 +10,10 @@
         with our state-of-the-art e-learning platform.
       </p>
       <div class="hero-buttons">
-        <a routerLink="/courses" class="btn-primary">Explore Courses</a>
-        <a href="#features" class="btn-secondary">Learn More</a>
+        <a routerLink="/courses" mat-raised-button color="primary" class="btn-primary">Explore Courses</a>
+        <!-- Show Register button for guests, or Dashboard for logged-in users -->
+        <a routerLink="/register" mat-stroked-button class="btn-secondary" *ngIf="!isLoggedIn">Sign Up Free</a>
+        <a routerLink="/dashboard" mat-stroked-button class="btn-secondary" *ngIf="isLoggedIn">My Dashboard</a>
       </div>
     </div>
     <div class="hero-image">
@@ -28,11 +31,11 @@
     </div>
 
     <div class="features-grid">
-      <div *ngFor="let feature of features" class="feature-card">
+      <mat-card *ngFor="let feature of features" class="feature-card">
         <div class="feature-icon">{{ feature.icon }}</div>
         <h3>{{ feature.title }}</h3>
         <p>{{ feature.description }}</p>
-      </div>
+      </mat-card>
     </div>
   </section>
 
@@ -58,12 +61,14 @@
     </div>
   </section>
 
-  <!-- CTA Section -->
+  <!-- CTA Section - Personalized based on auth state -->
   <section class="cta">
     <div class="cta-content">
-      <h2>Ready to Start Learning?</h2>
-      <p>Join thousands of students already learning on LearnHub</p>
-      <a routerLink="/courses" class="btn-cta">Browse All Courses</a>
+      <h2 *ngIf="!isLoggedIn">Ready to Start Learning?</h2>
+      <h2 *ngIf="isLoggedIn">Continue Your Learning Journey</h2>
+      <p *ngIf="!isLoggedIn">Join thousands of students already learning on LearnHub</p>
+      <p *ngIf="isLoggedIn">Pick up where you left off and keep making progress</p>
+      <a routerLink="/courses" mat-raised-button color="accent" class="btn-cta">Browse All Courses</a>
     </div>
   </section>
 </div>

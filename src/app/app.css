@@ -5,3 +5,12 @@
 router-outlet + * {
   display: block;
 }
+
+/* Loading progress bar positioned at the very top of the page */
+.top-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}

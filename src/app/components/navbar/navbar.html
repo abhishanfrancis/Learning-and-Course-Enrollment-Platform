@@ -1,3 +1,4 @@
+<!-- Navbar - Top navigation with auth-aware state -->
 <header class="navbar">
   <div class="navbar-container">
     <div class="navbar-logo">
@@ -19,6 +20,7 @@
             Courses
           </a>
         </li>
+        <!-- Dashboard link only shows when user is logged in -->
         <li class="navbar-item" *ngIf="currentStudent">
           <a routerLink="/dashboard" routerLinkActive="active">
             Dashboard
@@ -27,6 +29,7 @@
       </ul>
     </nav>
 
+    <!-- Profile dropdown when logged in -->
     <div class="navbar-profile" *ngIf="currentStudent">
       <div class="profile-dropdown">
         <button class="profile-btn" (click)="toggleDropdown()">
@@ -41,15 +44,17 @@
           </div>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item logout-btn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
             Logout
           </button>
         </div>
       </div>
     </div>
 
+    <!-- Login/Signup buttons when not logged in (with routerLink) -->
     <div class="navbar-auth" *ngIf="!currentStudent">
-      <button class="btn-login">Login</button>
-      <button class="btn-signup">Sign Up</button>
+      <a routerLink="/login" class="btn-login">Login</a>
+      <a routerLink="/register" class="btn-signup">Sign Up</a>
     </div>
   </div>
 </header>

@@ -1,0 +1,51 @@
+<!-- Related Courses Child Route Component -->
+<div class="related-container">
+  <div *ngIf="isLoading" class="loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Loading related courses...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <div *ngIf="relatedCourses.length === 0" class="no-related">
+      <mat-icon class="empty-icon">explore</mat-icon>
+      <p>No related courses found.</p>
+    </div>
+
+    <!-- Related Courses Grid -->
+    <div class="related-grid" *ngIf="relatedCourses.length > 0">
+      <mat-card *ngFor="let course of relatedCourses" class="related-card">
+        <img mat-card-image [src]="course.image" [alt]="course.title" class="card-image" />
+        <mat-card-content>
+          <div class="card-badge">
+            <span class="level-badge" [ngClass]="'level-' + course.level.toLowerCase()">
+              {{ course.level }}
+            </span>
+          </div>
+          <h3 class="card-title">{{ course.title }}</h3>
+          <p class="card-instructor">
+            <mat-icon class="small-icon">person</mat-icon>
+            {{ course.instructor.name }}
+          </p>
+          <div class="card-meta">
+            <span class="rating">
+              <mat-icon class="star-icon">star</mat-icon>
+              {{ course.rating }}
+            </span>
+            <span class="students">{{ course.enrolledStudents }} students</span>
+          </div>
+          <div class="card-price">{{ course.price | currency:'USD' }}</div>
+        </mat-card-content>
+        <mat-card-actions>
+          <a mat-button color="primary" [routerLink]="['/course', course.id]">
+            <mat-icon>visibility</mat-icon>
+            View Details
+          </a>
+          <a mat-button color="accent" [routerLink]="['/enroll', course.id]">
+            <mat-icon>school</mat-icon>
+            Enroll
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

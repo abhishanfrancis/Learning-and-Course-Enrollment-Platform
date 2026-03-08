@@ -9,7 +9,7 @@ A modern, feature-rich learning management platform built with Angular 21. Brows
 
 ## 📸 Screenshots
 
-![screenshot](screenshot.gif)
+![screenshot](demo.gif)
 
 ## ✨ Features
 
@@ -33,6 +33,29 @@ A modern, feature-rich learning management platform built with Angular 21. Brows
 - **User Profiles** - Personalized dashboard with profile management
 - **Image Support** - Course thumbnails and instructor profile pictures
 
+### Authentication & Security
+- **Login & Register** - Template-driven forms with validation and demo user quick-fill
+- **Auth Guard** - Route protection that redirects unauthenticated users to login with returnUrl support
+- **HTTP Error Interceptor** - Global error handling with MatSnackBar notifications for all HTTP failures
+
+### Angular Material UI
+- **Material Components** - MatToolbar, MatCard, MatTable, MatDialog, MatProgressBar, MatSnackBar, MatTabs, MatButton, MatIcon
+- **Enrollment Dialog** - Confirmation popup via MatDialog after successful enrollment
+- **Loading Indicator** - Global `MatProgressBar` during route navigation
+- **Themed Notifications** - Success/error snackbar messages across the app
+
+### Custom Pipes & Directives
+- **CourseFilterPipe** - Filter courses by category in the template
+- **CourseLevelPipe** - Filter courses by difficulty level
+- **CourseDurationPipe** - Filter courses by maximum duration
+- **HighlightTrendingDirective** - Gold border highlight for trending courses
+- **HighlightNewDirective** - Green border highlight for newly added courses
+
+### Observables & HTTP Client
+- **HttpClient Integration** - All data fetched from mock JSON files via Angular HttpClient
+- **BehaviorSubject Caching** - Reactive state management with RxJS BehaviorSubjects in services
+- **Error Handling** - `catchError` with fallback data in CourseService, global interceptor for HTTP errors
+
 ---
 
 ## 🛠️ Tech Stack
@@ -43,6 +66,11 @@ A modern, feature-rich learning management platform built with Angular 21. Brows
 - **Routing**: Angular Router with lazy loading
 - **State Management**: RxJS Observables
 - **Forms**: Angular Reactive Forms
+- **UI Library**: Angular Material 21.1.1
+- **Animations**: @angular/animations (async)
+- **HTTP**: Angular HttpClient with functional interceptors
+- **Guards**: Functional CanActivateFn route guards
+- **Architecture**: Standalone components (no NgModules)
 
 ---
 
@@ -101,6 +129,35 @@ learning-platform/
 └── package.json
 ```
 
+### New Additions to Project Structure
+
+```
+src/app/
+├── components/
+│   ├── login/                   # Login page (template-driven form)
+│   ├── register/                # Registration page (template-driven form)
+│   ├── course-reviews/          # Child route: course reviews
+│   ├── related-courses/         # Child route: related courses
+│   ├── feedback-form/           # Feedback form (reactive form)
+│   └── enrollment-dialog/       # MatDialog enrollment confirmation
+├── guards/
+│   └── auth.guard.ts            # Functional CanActivateFn guard
+├── interceptors/
+│   └── http-error.interceptor.ts # Functional HttpInterceptorFn
+├── pipes/
+│   └── course-filter.pipe.ts    # CourseFilter, CourseLevel, CourseDuration pipes
+├── directives/
+│   └── highlight-course.directive.ts # HighlightTrending, HighlightNew directives
+└── services/
+    ├── user.service.ts           # Authentication & user management
+    └── enrollment.service.ts     # Enrollment operations & progress tracking
+
+public/data/
+├── courses.json                 # Mock course data (HttpClient source)
+├── students.json                # Mock student/user data
+└── enrollments.json             # Mock enrollment records
+```
+
 ---
 
 ## 🎯 Key Pages
@@ -131,6 +188,33 @@ Welcome page with featured courses and call-to-action buttons
 - Payment card details
 - Form validation
 
+### Login Page (`/login`)
+- Template-driven form with email/password validation
+- **Demo user quick-fill buttons** (Roy Joseph & Jane Smith)
+- Password visibility toggle
+- Error banner for invalid credentials
+- Redirects to `returnUrl` after success
+
+### Register Page (`/register`)
+- Template-driven registration form
+- Password strength indicator
+- Redirects to login after registration
+
+### Course Reviews (`/course/:id/reviews`)
+- Child route under course detail page
+- Rating summary with star display
+- Individual review cards
+
+### Related Courses (`/course/:id/related`)
+- Child route under course detail page
+- Courses filtered by same category
+- Quick navigation to related course details
+
+### Feedback Form (`/feedback/:id`)
+- Reactive form built with FormBuilder & Validators
+- Star rating selector
+- Protected by AuthGuard
+
 ---
 
 ## 🎨 Features Showcase
@@ -151,6 +235,35 @@ Filter courses by:
 - Expandable question panels
 - Smooth animations
 - Comprehensive course information
+
+### Custom Pipes in Action
+- Template-driven filtering using `courseFilter`, `courseLevel`, and `courseDuration` pipes
+- Applied directly in `*ngFor` for declarative, reactive filtering
+- Pure pipes that re-evaluate only when inputs change
+
+### Custom Directives
+- `appHighlightTrending` — Adds a gold border to trending course cards
+- `appHighlightNew` — Adds a green border to newly added course cards
+- Applied as attribute directives on `<mat-card>` elements
+
+### Angular Material Integration
+- `MatDialog` for enrollment confirmation popups
+- `MatSnackBar` for success/error toast notifications
+- `MatProgressBar` for dashboard progress & navigation loading
+- `MatTable` with columns for enrolled courses on dashboard
+- `MatTabs`-style navigation for course detail child routes
+
+### Authentication Flow
+- Login/Register with template-driven forms
+- AuthGuard protects Dashboard, Enrollment, and Feedback routes
+- Unauthenticated users redirected to `/login?returnUrl=...`
+- Demo user quick-fill buttons for instant testing
+
+### HTTP & Error Handling
+- All data loaded via `HttpClient` from `/data/*.json` mock files
+- Global `httpErrorInterceptor` catches all HTTP errors
+- Error notifications displayed via `MatSnackBar` with status-specific messages
+- `CourseService` uses `BehaviorSubject` caching with `catchError` fallback
 
 ---
 
@@ -221,6 +334,52 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 - Angular Team for the amazing framework
 - Placeholder image services for demo images
 - Material Design for UI inspiration
+
+---
+
+## 🔧 New Services
+
+### UserService
+- `login(email, password)` — Authenticate against mock student data
+- `logout()` — Clear current user session
+- `register(student)` — Add new student to the system
+- `getCurrentUser$()` — Observable of the currently logged-in user
+- `isLoggedIn()` — Synchronous auth check
+
+### EnrollmentService
+- `enrollStudent(studentId, courseId)` — Create new enrollment record
+- `getStudentEnrollments(studentId)` — Get all enrollments for a student
+- `isEnrolled(studentId, courseId)` — Check enrollment status
+- `getStudentProgress(studentId, courses)` — Calculate progress across courses
+- `updateProgress(enrollmentId, percentage)` — Update course completion
+
+---
+
+## 🔀 Routing Architecture
+
+```
+/                     → Home (public)
+/courses              → Course List (public)
+/course/:id           → Course Detail (public)
+  /course/:id/reviews   → Course Reviews (child route)
+  /course/:id/related   → Related Courses (child route)
+/login                → Login (public)
+/register             → Register (public)
+/dashboard            → Student Dashboard (🔒 AuthGuard)
+/enroll/:id           → Enrollment Form (🔒 AuthGuard)
+/feedback/:id         → Feedback Form (🔒 AuthGuard)
+```
+
+---
+
+## 🧪 Demo Credentials
+
+| User | Email | Password |
+|------|-------|----------|
+| Roy Joseph | roy@example.com | password123 |
+| Jane Smith | jane@example.com | password456 |
+
+Use the **quick-fill buttons** on the login page to auto-populate credentials.
 
 ---
 

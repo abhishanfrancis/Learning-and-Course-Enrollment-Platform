@@ -123,49 +123,23 @@
           </div>
         </section>
 
-        <!-- Reviews Section -->
+        <!-- Reviews Section replaced by child route outlet -->
         <section class="section">
-          <h2>Student Reviews</h2>
-          <div class="rating-summary">
-            <div class="rating-display">
-              <div class="big-rating">{{ course.rating }}</div>
-              <div class="stars-display">
-                <span class="star" *ngFor="let i of [1, 2, 3, 4, 5]" [class.filled]="i <= course.rating">★</span>
-              </div>
-              <p class="review-count">({{ course.reviews.length }} reviews)</p>
-            </div>
-
-            <div class="rating-breakdown">
-              <div class="rating-bar" *ngFor="let num of [5, 4, 3, 2, 1]">
-                <span class="bar-label">{{ num }}★</span>
-                <div class="bar-container">
-                  <div class="bar-fill" [style.width.%]="getReviewPercentage(num)"></div>
-                </div>
-                <span class="bar-count">{{ getReviewCountByRating(num) }}</span>
-              </div>
-            </div>
+          <h2>Reviews & Related Courses</h2>
+          <!-- Tab navigation for child routes: reviews and related courses -->
+          <div class="child-route-tabs">
+            <a [routerLink]="['reviews']" routerLinkActive="tab-active" class="tab-link">
+              <mat-icon>rate_review</mat-icon> Student Reviews
+            </a>
+            <a [routerLink]="['related']" routerLinkActive="tab-active" class="tab-link">
+              <mat-icon>library_books</mat-icon> Related Courses
+            </a>
+            <a [routerLink]="['/feedback', course.id]" class="tab-link" *ngIf="isLoggedIn">
+              <mat-icon>feedback</mat-icon> Write Feedback
+            </a>
           </div>
-
-          <div class="reviews-list">
-            <div *ngIf="course.reviews.length === 0" class="no-reviews">
-              <p>No reviews yet. Be the first to review this course!</p>
-            </div>
-
-            <div *ngFor="let review of course.reviews" class="review-card">
-              <div class="review-header">
-                <div class="review-author">
-                  <h4>{{ review.studentName }}</h4>
-                  <span class="review-date">{{ review.date }}</span>
-                </div>
-                <div class="review-rating">
-                  <span class="stars-small">
-                    <span *ngFor="let i of [1, 2, 3, 4, 5]" [class.filled]="i <= review.rating">★</span>
-                  </span>
-                </div>
-              </div>
-              <p class="review-comment">{{ review.comment }}</p>
-            </div>
-          </div>
+          <!-- Child route outlet for reviews/related components -->
+          <router-outlet></router-outlet>
         </section>
       </main>
 

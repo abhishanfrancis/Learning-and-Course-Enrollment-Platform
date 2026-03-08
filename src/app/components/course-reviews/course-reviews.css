@@ -1,0 +1,167 @@
+/* Course Reviews Component Styles */
+.reviews-container {
+  padding: 20px 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.loading p {
+  margin-top: 15px;
+  color: #666;
+}
+
+/* Rating Summary */
+.rating-summary {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 30px;
+  padding: 25px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.rating-overview {
+  text-align: center;
+}
+
+.big-rating {
+  font-size: 56px;
+  font-weight: 700;
+  color: #333;
+}
+
+.stars-display {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.stars-display mat-icon {
+  color: #e0e0e0;
+  font-size: 24px;
+}
+
+.stars-display mat-icon.filled {
+  color: #ffc107;
+}
+
+.review-count {
+  color: #666;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Rating Breakdown */
+.rating-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.rating-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar-label {
+  display: flex;
+  align-items: center;
+  min-width: 35px;
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+}
+
+.star-small {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: #ffc107;
+}
+
+.bar-progress {
+  flex: 1;
+}
+
+.bar-count {
+  min-width: 25px;
+  text-align: right;
+  font-size: 13px;
+  color: #999;
+}
+
+/* Reviews List */
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.empty-icon {
+  font-size: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.review-card {
+  border-radius: 10px !important;
+}
+
+.review-avatar {
+  font-size: 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  color: #667eea;
+}
+
+.review-date {
+  color: #999;
+  font-size: 13px;
+}
+
+.review-stars {
+  display: inline-flex;
+  margin-left: 10px;
+}
+
+.star-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: #e0e0e0;
+}
+
+.star-icon.filled {
+  color: #ffc107;
+}
+
+.review-comment {
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .rating-summary {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .big-rating {
+    font-size: 42px;
+  }
+}

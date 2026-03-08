@@ -1,0 +1,135 @@
+<!-- Login Component - Template-driven form -->
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <div class="login-header">
+        <mat-icon class="login-icon">school</mat-icon>
+        <h1>Welcome Back</h1>
+        <p>Sign in to your LearnHub account</p>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Template-driven form using #loginForm="ngForm" -->
+      <form #loginForm="ngForm" (ngSubmit)="loginForm.valid && onSubmit()" class="login-form" novalidate>
+
+        <!-- Email Field with template-driven validation -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <mat-icon class="field-icon">email</mat-icon>
+            Email Address
+          </label>
+          <input
+            id="email"
+            type="email"
+            class="form-input"
+            name="email"
+            [(ngModel)]="email"
+            #emailField="ngModel"
+            required
+            email
+            placeholder="you@example.com"
+            [class.error]="emailField.invalid && emailField.touched"
+          />
+          <!-- Dynamic error messages using form control states: touched + invalid -->
+          <div class="error-messages" *ngIf="emailField.invalid && emailField.touched">
+            <span *ngIf="emailField.errors?.['required']" class="error-message">
+              Email is required
+            </span>
+            <span *ngIf="emailField.errors?.['email']" class="error-message">
+              Please enter a valid email address
+            </span>
+          </div>
+        </div>
+
+        <!-- Password Field with template-driven validation -->
+        <div class="form-group">
+          <label for="password" class="form-label">
+            <mat-icon class="field-icon">lock</mat-icon>
+            Password
+          </label>
+          <div class="password-wrapper">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-input"
+              name="password"
+              [(ngModel)]="password"
+              #passwordField="ngModel"
+              required
+              minlength="6"
+              placeholder="Enter your password"
+              [class.error]="passwordField.invalid && passwordField.touched"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility()"
+            >
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          <!-- Dynamic error messages using form control states: touched + invalid -->
+          <div class="error-messages" *ngIf="passwordField.invalid && passwordField.touched">
+            <span *ngIf="passwordField.errors?.['required']" class="error-message">
+              Password is required
+            </span>
+            <span *ngIf="passwordField.errors?.['minlength']" class="error-message">
+              Password must be at least 6 characters
+            </span>
+          </div>
+        </div>
+
+        <!-- Login Error Banner -->
+        <div class="error-banner" *ngIf="loginError">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ loginError }}</span>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="btn-login-submit"
+          [disabled]="loginForm.invalid || isSubmitting"
+        >
+          <mat-icon *ngIf="!isSubmitting">login</mat-icon>
+          <span *ngIf="!isSubmitting">Sign In</span>
+          <span *ngIf="isSubmitting">Signing In...</span>
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div class="login-footer">
+        <!-- Quick-fill buttons for demo users -->
+        <div class="demo-users">
+          <p class="demo-label">Quick Login as Demo User:</p>
+          <div class="demo-buttons">
+            <button
+              mat-stroked-button
+              type="button"
+              class="demo-btn"
+              (click)="fillDemoUser('roy')"
+            >
+              <mat-icon>person</mat-icon>
+              Roy Joseph
+            </button>
+            <button
+              mat-stroked-button
+              type="button"
+              class="demo-btn"
+              (click)="fillDemoUser('jane')"
+            >
+              <mat-icon>person_outline</mat-icon>
+              Jane Smith
+            </button>
+          </div>
+        </div>
+
+        <p>Don't have an account? <a routerLink="/register">Sign Up</a></p>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

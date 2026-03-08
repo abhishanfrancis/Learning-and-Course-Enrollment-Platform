@@ -30,4 +30,7 @@ export interface Course {
   syllabus: string[];
   reviews: Review[];
   learningOutcomes: string[];
+  isTrending: boolean;   // Flag for trending course highlight
+  isNew: boolean;        // Flag for newly added course highlight
+  createdDate: string;   // Date when course was created
 }

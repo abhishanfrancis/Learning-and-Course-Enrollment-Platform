@@ -1,0 +1,151 @@
+<!-- Feedback Form Component - Reactive form for course feedback -->
+<div class="feedback-container">
+  <!-- Success State -->
+  <div *ngIf="submitted" class="success-state">
+    <mat-card class="success-card">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h2>Feedback Submitted!</h2>
+      <p>Thank you for your review of <strong>{{ course?.title }}</strong>.</p>
+      <p class="subtitle">Your feedback helps us improve our courses.</p>
+      <div class="success-actions">
+        <a mat-raised-button color="primary" [routerLink]="['/course', course?.id]">
+          Back to Course
+        </a>
+        <a mat-button routerLink="/courses">Browse More Courses</a>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Feedback Form -->
+  <div *ngIf="!submitted" class="feedback-content">
+    <div class="feedback-header">
+      <h1>Course Feedback</h1>
+      <p *ngIf="course">Share your experience with <strong>{{ course.title }}</strong></p>
+    </div>
+
+    <mat-card class="feedback-card">
+      <!-- Reactive form using [formGroup] -->
+      <form [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" class="feedback-form">
+
+        <!-- Star Rating Selection -->
+        <div class="form-group">
+          <label class="form-label">Overall Rating *</label>
+          <div class="star-rating">
+            <button
+              type="button"
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              class="star-btn"
+              (click)="setRating(star)"
+              (mouseenter)="onStarHover(star)"
+              (mouseleave)="onStarLeave()"
+              [class.active]="star <= (hoverRating || selectedRating)"
+            >
+              <mat-icon>{{ star <= (hoverRating || selectedRating) ? 'star' : 'star_border' }}</mat-icon>
+            </button>
+            <span class="rating-text" *ngIf="selectedRating">
+              {{ selectedRating }}/5
+            </span>
+          </div>
+          <!-- Reactive form validation: touched + invalid states -->
+          <div class="error-messages" *ngIf="rating?.invalid && rating?.touched">
+            <span class="error-message">Please select a rating</span>
+          </div>
+        </div>
+
+        <!-- Student Name (reactive form control) -->
+        <div class="form-group">
+          <label for="studentName" class="form-label">Your Name *</label>
+          <input
+            id="studentName"
+            type="text"
+            class="form-input"
+            formControlName="studentName"
+            placeholder="Enter your name"
+            [class.error]="studentName?.invalid && studentName?.touched"
+          />
+          <div class="error-messages" *ngIf="studentName?.invalid && studentName?.touched">
+            <span *ngIf="studentName?.errors?.['required']" class="error-message">
+              Name is required
+            </span>
+            <span *ngIf="studentName?.errors?.['minlength']" class="error-message">
+              Name must be at least 3 characters
+            </span>
+          </div>
+        </div>
+
+        <!-- Email (reactive form control with email validator) -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address *</label>
+          <input
+            id="email"
+            type="email"
+            class="form-input"
+            formControlName="email"
+            placeholder="you@example.com"
+            [class.error]="email?.invalid && email?.touched"
+          />
+          <div class="error-messages" *ngIf="email?.invalid && email?.touched">
+            <span *ngIf="email?.errors?.['required']" class="error-message">
+              Email is required
+            </span>
+            <span *ngIf="email?.errors?.['email']" class="error-message">
+              Please enter a valid email address
+            </span>
+          </div>
+        </div>
+
+        <!-- Comment (reactive form control with minlength) -->
+        <div class="form-group">
+          <label for="comment" class="form-label">Your Review *</label>
+          <textarea
+            id="comment"
+            class="form-textarea"
+            formControlName="comment"
+            rows="5"
+            placeholder="Share your thoughts about the course..."
+            [class.error]="comment?.invalid && comment?.touched"
+          ></textarea>
+          <div class="char-count" [class.warning]="(comment?.value?.length || 0) < 10">
+            {{ comment?.value?.length || 0 }} / 10 min characters
+          </div>
+          <div class="error-messages" *ngIf="comment?.invalid && comment?.touched">
+            <span *ngIf="comment?.errors?.['required']" class="error-message">
+              Review comment is required
+            </span>
+            <span *ngIf="comment?.errors?.['minlength']" class="error-message">
+              Review must be at least 10 characters
+            </span>
+          </div>
+        </div>
+
+        <!-- Recommend Checkbox -->
+        <div class="form-group checkbox-group">
+          <input id="recommend" type="checkbox" formControlName="recommend" />
+          <label for="recommend" class="checkbox-label">
+            I would recommend this course to others
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="btn-submit"
+          [disabled]="isSubmitting"
+        >
+          <mat-icon *ngIf="!isSubmitting">send</mat-icon>
+          <span *ngIf="!isSubmitting">Submit Feedback</span>
+          <span *ngIf="isSubmitting">Submitting...</span>
+        </button>
+
+        <!-- Back Link -->
+        <div class="form-footer">
+          <a [routerLink]="['/course', course?.id]" class="btn-back">
+            ← Back to Course
+          </a>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "studentId": 1,
+    "courseId": 1,
+    "enrollmentDate": "2024-01-05",
+    "completionPercentage": 65,
+    "lastAccessedDate": "2024-01-22",
+    "status": "Active",
+    "certificateObtained": false
+  },
+  {
+    "id": 2,
+    "studentId": 1,
+    "courseId": 3,
+    "enrollmentDate": "2024-01-10",
+    "completionPercentage": 40,
+    "lastAccessedDate": "2024-01-20",
+    "status": "Active",
+    "certificateObtained": false
+  },
+  {
+    "id": 3,
+    "studentId": 1,
+    "courseId": 4,
+    "enrollmentDate": "2023-12-01",
+    "completionPercentage": 100,
+    "lastAccessedDate": "2024-01-15",
+    "status": "Completed",
+    "certificateObtained": true
+  }
+]

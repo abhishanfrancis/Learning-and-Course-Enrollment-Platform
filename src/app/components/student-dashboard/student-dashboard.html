@@ -1,3 +1,4 @@
+<!-- Student Dashboard - Enrolled courses with progress tracking -->
 <div class="dashboard-container">
   <!-- Header Section -->
   <header class="dashboard-header">
@@ -11,18 +12,18 @@
       </div>
 
       <div class="header-stats">
-        <div class="stat-card">
+        <mat-card class="stat-card">
           <div class="stat-number">{{ enrolledCourses.length }}</div>
           <div class="stat-label">Courses Enrolled</div>
-        </div>
-        <div class="stat-card">
+        </mat-card>
+        <mat-card class="stat-card">
           <div class="stat-number">{{ getCompletedCoursesCount() }}</div>
           <div class="stat-label">Completed</div>
-        </div>
-        <div class="stat-card">
+        </mat-card>
+        <mat-card class="stat-card">
           <div class="stat-number">{{ getTotalCompletionPercentage() }}%</div>
           <div class="stat-label">Average Progress</div>
-        </div>
+        </mat-card>
       </div>
     </div>
   </header>
@@ -31,16 +32,16 @@
   <main class="dashboard-main">
     <!-- Loading State -->
     <div class="loading-state" *ngIf="isLoading">
-      <div class="spinner"></div>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       <p>Loading your courses...</p>
     </div>
 
     <!-- Empty State -->
     <div class="empty-state" *ngIf="!isLoading && enrolledCourses.length === 0">
-      <div class="empty-icon">📚</div>
+      <mat-icon class="empty-icon-mat">school</mat-icon>
       <h2>No courses yet</h2>
       <p>Start learning today by enrolling in a course</p>
-      <a routerLink="/courses" class="btn-browse">Browse Courses</a>
+      <a routerLink="/courses" mat-raised-button color="primary">Browse Courses</a>
     </div>
 
     <!-- Courses Section -->
@@ -48,24 +49,73 @@
       <!-- Tab Navigation -->
       <div class="tab-navigation">
         <button
+          mat-button
           class="tab-btn"
           [class.active]="activeTab === 'active'"
           (click)="activeTab = 'active'"
         >
-          <span class="tab-icon">📖</span>
+          <mat-icon>menu_book</mat-icon>
           Active Courses ({{ getActiveCourses().length }})
         </button>
         <button
+          mat-button
           class="tab-btn"
           [class.active]="activeTab === 'completed'"
           (click)="activeTab = 'completed'"
         >
-          <span class="tab-icon">✓</span>
+          <mat-icon>check_circle</mat-icon>
           Completed ({{ getCompletedCoursesCount() }})
         </button>
       </div>
 
-      <!-- Active Courses Tab -->
+      <!-- MatTable for course overview (compact view) -->
+      <div class="table-section" *ngIf="enrolledCourses.length > 0">
+        <h3>Course Overview</h3>
+        <table mat-table [dataSource]="enrolledCourses" class="mat-elevation-z2 courses-table">
+          <ng-container matColumnDef="courseName">
+            <th mat-header-cell *matHeaderCellDef>Course</th>
+            <td mat-cell *matCellDef="let element">{{ element.courseName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="instructor">
+            <th mat-header-cell *matHeaderCellDef>Instructor</th>
+            <td mat-cell *matCellDef="let element">{{ element.instructor }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="progress">
+            <th mat-header-cell *matHeaderCellDef>Progress</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="table-progress">
+                <mat-progress-bar mode="determinate" [value]="element.completionPercentage"></mat-progress-bar>
+                <span>{{ element.completionPercentage }}%</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <span class="badge" [class.badge-active]="element.status === 'Active'" [class.badge-completed]="element.status === 'Completed'">
+                {{ element.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <a mat-icon-button [routerLink]="['/course', element.courseId]" color="primary">
+                <mat-icon>visibility</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- Active Courses Tab (Card View) -->
       <div class="tab-content" *ngIf="activeTab === 'active'">
         <div *ngIf="getActiveCourses().length === 0" class="no-courses-message">
           <p>You have no active courses. Enroll in a new course to get started!</p>
@@ -73,85 +123,96 @@
         </div>
 
         <div class="courses-grid">
-          <div *ngFor="let course of getActiveCourses()" class="course-progress-card">
-            <div class="card-header">
-              <h3>{{ course.courseName }}</h3>
+          <mat-card *ngFor="let course of getActiveCourses()" class="course-progress-card">
+            <mat-card-header>
+              <mat-card-title>{{ course.courseName }}</mat-card-title>
               <span class="badge badge-active">Active</span>
-            </div>
+            </mat-card-header>
 
-            <div class="card-body">
-              <p class="instructor">👨‍🏫 {{ course.instructor }}</p>
+            <mat-card-content>
+              <p class="instructor">
+                <mat-icon class="instructor-icon">person</mat-icon> {{ course.instructor }}
+              </p>
 
+              <!-- MatProgressBar for visual progress display -->
               <div class="progress-section">
                 <div class="progress-header">
                   <span class="progress-label">Progress</span>
                   <span class="progress-percentage">{{ course.completionPercentage }}%</span>
                 </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" [style.width.%]="course.completionPercentage"></div>
-                </div>
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="course.completionPercentage"
+                  color="primary">
+                </mat-progress-bar>
               </div>
 
               <div class="course-meta">
                 <div class="meta-item">
-                  <span class="meta-icon">📅</span>
+                  <mat-icon>calendar_today</mat-icon>
                   <span>Last accessed: {{ course.lastAccessed }}</span>
                 </div>
               </div>
+            </mat-card-content>
 
-              <div class="card-actions">
-                <button
-                  class="btn-continue"
-                  (click)="updateProgress(course.enrollmentId, Math.min(course.completionPercentage + 10, 100))"
-                >
-                  Continue Learning
-                </button>
-                <a [routerLink]="['/course', course.courseId]" class="btn-view">View Course</a>
-              </div>
-            </div>
-          </div>
+            <mat-card-actions>
+              <button
+                mat-raised-button color="primary"
+                (click)="updateProgress(course.enrollmentId, Math.min(course.completionPercentage + 10, 100))"
+              >
+                Continue Learning
+              </button>
+              <a mat-stroked-button [routerLink]="['/course', course.courseId]">View Course</a>
+            </mat-card-actions>
+          </mat-card>
         </div>
       </div>
 
-      <!-- Completed Courses Tab -->
+      <!-- Completed Courses Tab (Card View) -->
       <div class="tab-content" *ngIf="activeTab === 'completed'">
         <div *ngIf="getCompletedCourses().length === 0" class="no-courses-message">
           <p>You haven't completed any courses yet. Keep learning!</p>
         </div>
 
         <div class="courses-grid">
-          <div *ngFor="let course of getCompletedCourses()" class="course-progress-card completed">
-            <div class="card-header">
-              <h3>{{ course.courseName }}</h3>
+          <mat-card *ngFor="let course of getCompletedCourses()" class="course-progress-card completed">
+            <mat-card-header>
+              <mat-card-title>{{ course.courseName }}</mat-card-title>
               <span class="badge badge-completed">✓ Completed</span>
-            </div>
+            </mat-card-header>
 
-            <div class="card-body">
-              <p class="instructor">👨‍🏫 {{ course.instructor }}</p>
+            <mat-card-content>
+              <p class="instructor">
+                <mat-icon class="instructor-icon">person</mat-icon> {{ course.instructor }}
+              </p>
 
               <div class="progress-section">
                 <div class="progress-header">
                   <span class="progress-label">Progress</span>
                   <span class="progress-percentage">{{ course.completionPercentage }}%</span>
                 </div>
-                <div class="progress-bar">
-                  <div class="progress-fill" [style.width.%]="course.completionPercentage"></div>
-                </div>
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="course.completionPercentage"
+                  color="accent">
+                </mat-progress-bar>
               </div>
 
               <div class="course-meta">
                 <div class="meta-item">
-                  <span class="meta-icon">🎓</span>
+                  <mat-icon>workspace_premium</mat-icon>
                   <span>Certificate earned</span>
                 </div>
               </div>
+            </mat-card-content>
 
-              <div class="card-actions">
-                <a [routerLink]="['/course', course.courseId]" class="btn-review">Review Course</a>
-                <button class="btn-certificate">Download Certificate</button>
-              </div>
-            </div>
-          </div>
+            <mat-card-actions>
+              <a mat-stroked-button [routerLink]="['/course', course.courseId]">Review Course</a>
+              <button mat-raised-button color="accent">
+                <mat-icon>download</mat-icon> Download Certificate
+              </button>
+            </mat-card-actions>
+          </mat-card>
         </div>
       </div>
     </div>

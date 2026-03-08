@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Roy Joseph",
+    "email": "roy@example.com",
+    "password": "password123",
+    "phone": "+1 (555) 123-4567",
+    "profileImage": "https://image2url.com/r2/default/images/1769100653013-6c34be2e-4be5-4146-b42e-cb6ebe7e303d.jpg",
+    "joinDate": "2023-06-15"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "password": "password456",
+    "phone": "+1 (555) 987-6543",
+    "profileImage": "https://via.placeholder.com/100x100?text=Jane",
+    "joinDate": "2023-08-20"
+  }
+]

@@ -1,14 +1,28 @@
+/**
+ * CourseDetailComponent - Full course detail page with child routes.
+ *
+ * Features:
+ * - Displays course hero, instructor, overview, syllabus, FAQ sections
+ * - Contains a <router-outlet> for child routes (reviews, related courses)
+ * - Tab navigation for switching between reviews and related child views
+ * - Uses UserService for auth state and EnrollmentService for enrollment check
+ * - Uses Angular Material components (MatButton, MatIcon, MatTabsModule)
+ */
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 import { CourseService } from '../../services/course.service';
-import { StudentService } from '../../services/student.service';
+import { UserService } from '../../services/user.service';
+import { EnrollmentService } from '../../services/enrollment.service';
 import { Course } from '../../models/course.model';
 
 @Component({
   selector: 'app-course-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RouterOutlet, RouterLinkActive, MatButtonModule, MatIconModule, MatTabsModule],
   templateUrl: './course-detail.html',
   styleUrl: './course-detail.css',
 })
@@ -16,7 +30,7 @@ export class CourseDetailComponent implements OnInit {
   course: Course | undefined;
   isLoading = true;
   isEnrolled = false;
-  currentUserId = 1; // Assuming logged in user ID
+  isLoggedIn = false;
 
   faqs = [
     {
@@ -60,13 +74,23 @@ export class CourseDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private courseService: CourseService,
-    private studentService: StudentService
+    private userService: UserService,
+    private enrollmentService: EnrollmentService
   ) {}
 
   ngOnInit(): void {
+    // Subscribe to route params to load the correct course
     this.route.params.subscribe((params) => {
-      const courseId = +params['id']; // Convert string to number
+      const courseId = +params['id'];
       this.loadCourse(courseId);
+    });
+
+    // Check authentication state from UserService
+    this.userService.getCurrentUser$().subscribe((user) => {
+      this.isLoggedIn = !!user;
+      if (user && this.course) {
+        this.checkEnrollment(user.id, this.course.id);
+      }
     });
   }
 
@@ -75,17 +99,21 @@ export class CourseDetailComponent implements OnInit {
       this.course = course;
       this.isLoading = false;
       if (course) {
-        this.checkEnrollment(course.id);
+        // Check enrollment using EnrollmentService
+        this.userService.getCurrentUser$().subscribe((user) => {
+          if (user) {
+            this.checkEnrollment(user.id, course.id);
+          }
+        });
       }
     });
   }
 
-  checkEnrollment(courseId: number): void {
-    this.studentService
-      .isEnrolled(this.currentUserId, courseId)
-      .subscribe((enrolled) => {
-        this.isEnrolled = enrolled;
-      });
+  /** Check enrollment status via EnrollmentService */
+  checkEnrollment(userId: number, courseId: number): void {
+    this.enrollmentService.isEnrolled(userId, courseId).subscribe((enrolled) => {
+      this.isEnrolled = enrolled;
+    });
   }
 
   getRatingPercentage(): number {

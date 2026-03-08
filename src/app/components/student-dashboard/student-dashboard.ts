@@ -1,7 +1,23 @@
+/**
+ * StudentDashboardComponent - Dashboard showing enrolled courses and progress.
+ *
+ * Features:
+ * - Uses UserService for current authenticated user data
+ * - Uses EnrollmentService for enrollment data and progress tracking
+ * - Uses Angular Material MatProgressBar for visual progress indicators
+ * - Uses Angular Material MatTable for listing enrolled courses
+ * - Active/Completed tab navigation
+ */
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { StudentService } from '../../services/student.service';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { UserService } from '../../services/user.service';
+import { EnrollmentService } from '../../services/enrollment.service';
 import { CourseService } from '../../services/course.service';
 import { Student, StudentProgress } from '../../models/student.model';
 import { Course } from '../../models/course.model';
@@ -9,7 +25,10 @@ import { Course } from '../../models/course.model';
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [
+    CommonModule, RouterLink,
+    MatProgressBarModule, MatButtonModule, MatIconModule, MatCardModule, MatTableModule
+  ],
   templateUrl: './student-dashboard.html',
   styleUrl: './student-dashboard.css',
 })
@@ -21,8 +40,12 @@ export class StudentDashboardComponent implements OnInit {
   activeTab: 'active' | 'completed' = 'active';
   Math = Math;
 
+  // Columns for MatTable display
+  displayedColumns: string[] = ['courseName', 'instructor', 'progress', 'status', 'actions'];
+
   constructor(
-    private studentService: StudentService,
+    private userService: UserService,
+    private enrollmentService: EnrollmentService,
     private courseService: CourseService
   ) {}
 
@@ -30,22 +53,26 @@ export class StudentDashboardComponent implements OnInit {
     this.loadStudentData();
   }
 
+  /** Load current user data, all courses, then enrolled courses */
   loadStudentData(): void {
-    // Load all courses first, then enrolled courses
     this.courseService.getCourses().subscribe((courses) => {
       this.allCourses = courses;
 
-      this.studentService.getCurrentStudent().subscribe((student) => {
+      // Get current user from UserService (reactive auth)
+      this.userService.getCurrentUser$().subscribe((student) => {
         this.currentStudent = student;
         if (student) {
           this.loadEnrolledCourses(student.id);
+        } else {
+          this.isLoading = false;
         }
       });
     });
   }
 
+  /** Load enrolled courses with progress from EnrollmentService */
   loadEnrolledCourses(studentId: number): void {
-    this.studentService.getStudentProgress(studentId, this.allCourses).subscribe(
+    this.enrollmentService.getStudentProgress(studentId, this.allCourses).subscribe(
       (progress) => {
         this.enrolledCourses = progress;
         this.isLoading = false;
@@ -61,8 +88,9 @@ export class StudentDashboardComponent implements OnInit {
     return this.enrolledCourses.filter((c) => c.status === 'Completed');
   }
 
+  /** Update course progress using EnrollmentService */
   updateProgress(enrollmentId: number, newPercentage: number): void {
-    this.studentService.updateEnrollmentProgress(enrollmentId, newPercentage).subscribe(
+    this.enrollmentService.updateProgress(enrollmentId, newPercentage).subscribe(
       () => {
         const course = this.enrolledCourses.find((c) => c.enrollmentId === enrollmentId);
         if (course) {
